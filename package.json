@@ -1,0 +1,31 @@
+{
+  "name": "fieldstamp",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Local-first field photo capture with GPS and MongoDB backup.",
+  "scripts": {
+    "build": "vite build",
+    "start": "npm run build && node server/server.js",
+    "dev": "vite --host 0.0.0.0",
+    "android:sync": "npm run build && cap sync android",
+    "android:run": "npm run android:sync && cap run android",
+    "ios:sync": "npm run build && cap sync ios",
+    "ios:open": "cap open ios"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.6.2",
+    "@capacitor/core": "^8.6.2",
+    "@capacitor/ios": "^8.6.2",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "mongoose": "^8.19.1"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.6.2",
+    "vite": "^8.3.8"
+  }
+}

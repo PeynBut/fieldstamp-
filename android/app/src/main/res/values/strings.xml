@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">FieldStamp</string>
+    <string name="title_activity_main">FieldStamp</string>
+    <string name="package_name">com.fieldstamp.app</string>
+    <string name="custom_url_scheme">com.fieldstamp.app</string>
+</resources>

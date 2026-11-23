@@ -1,0 +1,15 @@
+node_modules/
+.env*
+!.env.example
+*.jks
+*.keystore
+key.properties
+android/app/google-services.json
+npm-debug.log*
+dist/
+.gradle-cache/
+.local-secrets/
+FieldStamp.apk
+android/.gradle/
+android/build/
+android/app/build/

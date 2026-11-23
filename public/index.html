@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#101412" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="FieldStamp" />
+  <meta name="description" content="Capture field photos with GPS and time stamps, saved locally and synced with MongoDB." />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/icon-192.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>FieldStamp — field photos, in place</title>
+</head>
+<body>
+  <main class="app-shell">
+    <section class="page active camera-page" id="capturePage">
+      <header class="camera-topbar">
+        <a class="camera-brand" href="#capture" aria-label="FieldStamp home"><span class="brand-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7h3l1.5-2h7L17 7h3v12H4z"/><circle cx="12" cy="13" r="4"/></svg></span><strong>FieldStamp</strong></a>
+        <span id="todayLabel" class="camera-date"></span>
+        <button id="installBtn" class="install-button" aria-label="Install FieldStamp" hidden>Install</button>
+        <button id="settingsOpen" class="camera-settings" aria-label="Open settings">⚙</button>
+      </header>
+      <div class="camera-view" id="cameraView">
+        <video id="video" autoplay playsinline muted hidden></video>
+        <div id="cameraPlaceholder" class="camera-placeholder"><span class="placeholder-icon">◎</span><strong>Camera is off</strong><span>Tap the shutter to start the camera.</span><button id="enableCamera" class="enable-camera">Turn camera on</button></div>
+        <div class="camera-vignette"></div>
+        <div id="captureFlash" class="capture-flash" aria-hidden="true"></div>
+        <div class="view-heading"><strong id="viewHeading">CAMERA PREVIEW</strong><span id="viewSubheading">FIELD CAPTURE</span></div>
+        <div class="live-stamp" id="liveStamp" hidden><span class="stamp-mark">● LIVE FIELD STAMP</span><strong id="liveDate"></strong><span id="liveLocation">Finding your location…</span></div>
+        <button id="switchCamera" class="flip-button" aria-label="Switch camera" title="Switch camera" hidden>↻</button>
+        <span id="cameraStatus" class="camera-status">CAMERA OFF</span>
+        <div class="zoom-controls" aria-label="Digital zoom"><button type="button" data-zoom="1" class="active">1×</button><button type="button" data-zoom="2">2×</button><button type="button" data-zoom="3">3×</button></div>
+      </div>
+      <div class="camera-tools"><div class="gps-indicator"><span class="gps-icon">⌖</span><div><strong id="gpsStatus">Location off</strong><small id="gpsAccuracy">Allow access to find this place</small></div></div><button id="gpsButton" class="text-button">Get location</button></div>
+      <div class="camera-dock"><div class="recent-preview"><span>LAST PHOTO</span><div id="recentGrid" class="photo-grid camera-recent-grid" aria-label="Most recent captured photo"></div><div id="emptyPhotos" class="camera-empty">No photos yet</div><span id="photoCount" class="count-pill">0 photos</span></div><button id="captureBtn" class="camera-shutter" aria-label="Capture photo" disabled><span class="shutter-icon"></span><span>CAPTURE</span></button><button class="gallery-shortcut" type="button" data-tab="libraryPage" aria-label="Open photo library"><span aria-hidden="true">▦</span><small>LIBRARY</small></button></div>
+      <p class="privacy-note"><span>▣</span> Photos save with GPS and capture time to this device’s photo library</p>
+    </section>    <section class="page" id="libraryPage"><div class="section-heading"><div><p class="eyebrow">SAVED ON THIS DEVICE</p><h1>Your photos</h1></div><span id="libraryCount" class="date-chip">0 saved</span></div><div id="libraryGrid" class="library-grid"></div><div id="libraryEmpty" class="empty-state"><span>▧</span><strong>Your fieldwork, at a glance.</strong><p>Photos captured on this device appear here with their original GPS and time stamps.</p></div></section>
+    <section class="page" id="settingsPage"><div class="section-heading"><div><p class="eyebrow">APP</p><h1>Settings</h1></div></div><div class="settings-card permission-settings"><div><strong>Camera and location access</strong><p>Manage FieldStamp’s camera and GPS permissions in your device settings.</p></div><button id="permissionsSettings" class="secondary-button">Open settings</button></div><div class="settings-card storage-card"><div class="storage-icon">▣</div><div><strong>On-device storage and sync</strong><p>Photos save to this device first and to its photo library. MongoDB sync runs when the backend is available. New place names need internet; FieldStamp keeps the last resolved place for offline use. Coordinates are sent to <a href="https://www.bigdatacloud.com/docs/free-api/free-reverse-geocode-to-city-api" target="_blank" rel="noopener">BigDataCloud</a> or, if unavailable, <a href="https://nominatim.openstreetmap.org/" target="_blank" rel="noopener">OpenStreetMap</a> to look up the place name. Map data © OpenStreetMap contributors.</p></div></div><div class="about-note">FIELDSTAMP · CAPTUREJOTOH</div></section>
+
+    <nav class="tab-bar" aria-label="Main navigation"><button class="tab active" data-tab="capturePage" aria-current="page"><span class="tab-icon">◎</span>Camera</button><button class="tab" data-tab="libraryPage"><span class="tab-icon">▤</span>Library<span class="tab-count" id="navCount" hidden>0</span></button><button class="tab" data-tab="settingsPage"><span class="tab-icon">⚙</span>Settings</button></nav>
+  </main>
+
+  <dialog id="permissionDialog" class="permission-dialog" aria-labelledby="permissionTitle" aria-describedby="permissionMessage"><div class="permission-mark" aria-hidden="true">⌖</div><h2 id="permissionTitle">Allow camera and location?</h2><p id="permissionMessage">Camera access takes the photo. Location access adds your place and time to the stamp. You can change these permissions in device settings at any time.</p><div class="permission-actions"><button id="permissionCancel" class="permission-secondary">Not now</button><button id="permissionContinue" class="permission-primary">Continue</button></div></dialog>
+  <dialog id="detailDialog" class="detail-dialog"><button class="close-button" id="closeDetail" aria-label="Close">×</button><img id="detailImage" alt="Saved photo"/><div class="detail-content"><p class="eyebrow">PHOTO DETAILS</p><h2 id="detailDate"></h2><div class="detail-location"><span>⌖</span><span id="detailPlace"></span></div><p id="detailCoords" class="detail-coordinates"></p><a id="mapLink" class="map-link" target="_blank" rel="noopener">Open map ↗</a><div class="detail-buttons"><button id="sharePhoto" class="primary-button">Save or share photo</button><button id="deletePhoto" class="danger-button">Delete</button></div></div></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
